@@ -99,6 +99,8 @@ def main():
         },
         install_requires     = [
             'chryso==1.3',
+            'Flask==0.10.1',
+            'flask-login==0.3.2',
             'sepiida==5.27',
         ],
         extras_require       = {
