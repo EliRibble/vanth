@@ -1,0 +1,14 @@
+<html>
+<body>
+{% if current_user and current_user.is_authenticated %}
+	<h1>Hello {{ current_user.name }} from Vanth</h1>
+{% else %}
+	<h1>Please log in</h1>
+	<form action="/login/" method="POST">
+		<label>username</label><input type="text" name="username"></input>
+		<label>password</label><input type="password" name="password"></input>
+		<input type="submit">Log in</input>
+	</form>
+{% endif %}
+</body>
+</html>

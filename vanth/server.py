@@ -1,14 +1,37 @@
-from flask import Flask
-from flask_uuid import FlaskUUID
-from sepiida import endpoints
+import uuid
+
+import flask
+import flask_login
+import flask_uuid
+import sepiida.endpoints
 
 import vanth.api.about
+import vanth.user
 
+
+def index():
+    return flask.render_template('index.html')
+
+def load_user(user_id):
+    return vanth.user.load(user_id)
+
+def login():
+    if flask.request.method == 'GET':
+        return flask.render_template('index.html')
+    else:
+        user = vanth.user.load(uuid.uuid4())
+        flask_login.login_user(user)
+        return flask.redirect('/')
 
 def create_app(config):
-    app = Flask('vanth')
+    app = flask.Flask('vanth', template_folder='../templates')
 
-    FlaskUUID(app)
+    flask_uuid.FlaskUUID(app)
+    login_manager = flask_login.LoginManager()
+    login_manager.init_app(app)
+
+    login_manager.user_loader(load_user)
+
     app.config.update(
         API_TOKEN                 = config.api_token,
         DEBUG                     = config.debug,
@@ -16,6 +39,9 @@ def create_app(config):
         SESSION_COOKIE_DOMAIN     = config.session_cookie_domain,
     )
 
-    endpoints.add_resource(app, vanth.api.about.About,               endpoint='about')
+    app.route('/', methods=['GET'])(index)
+    app.route('/login/', methods=['GET', 'POST'])(login)
+
+    sepiida.endpoints.add_resource(app, vanth.api.about.About, endpoint='about')
 
     return app
