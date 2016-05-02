@@ -18,10 +18,16 @@ def load_user(user_id):
 def login():
     if flask.request.method == 'GET':
         return flask.render_template('index.html')
-    else:
+    elif flask.request.method == 'POST':
         user = vanth.user.load(uuid.uuid4())
         flask_login.login_user(user)
-        return flask.redirect('/')
+    elif flask.request.method == 'DELETE':
+        flask_login.logout_user()
+    return flask.redirect('/')
+
+def logout():
+    flask_login.logout_user()
+    return flask.redirect('/')
 
 def create_app(config):
     app = flask.Flask('vanth', template_folder='../templates')
@@ -40,7 +46,8 @@ def create_app(config):
     )
 
     app.route('/', methods=['GET'])(index)
-    app.route('/login/', methods=['GET', 'POST'])(login)
+    app.route('/login/', methods=['GET', 'POST', 'DELETE'])(login)
+    app.route('/logout/', methods=['POST'])(logout)
 
     sepiida.endpoints.add_resource(app, vanth.api.about.About, endpoint='about')
 
