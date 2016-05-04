@@ -1,4 +1,5 @@
 import sepiida.endpoints
+import sepiida.errors
 import sepiida.fields
 
 import vanth.platform.user
@@ -8,7 +9,7 @@ class User(sepiida.endpoints.APIEndpoint):
     ENDPOINT = '/user/'
     SIGNATURE = sepiida.fields.JSONObject(s={
         'name'      : sepiida.fields.String(),
-        'password'  : sepiida.fields.String(),
+        'password'  : sepiida.fields.String(methods=['POST', 'PUT']),
         'username'  : sepiida.fields.String(),
     })
 
@@ -19,5 +20,8 @@ class User(sepiida.endpoints.APIEndpoint):
         return None, 204, {'Location': uri}
 
     @staticmethod
-    def get(uuid): # pylint: disable=unused-argument
-        return {}
+    def get(uuid):
+        users = vanth.platform.user.by_filter({'uuid': [str(uuid)]})
+        if not users:
+            raise sepiida.errors.ResourceNotFound()
+        return users[0]
