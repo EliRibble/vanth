@@ -1,9 +1,20 @@
-from sqlalchemy import Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, MetaData, String, Table, func
-from sqlalchemy.dialects.postgresql import UUID, ENUM
-from sqlalchemy.dialects import postgres
 import chryso.constants
+from sqlalchemy import (Column, Date, DateTime, Float, ForeignKey, Integer,
+                        MetaData, String, Table, func)
+from sqlalchemy.dialects.postgresql import UUID
 
 metadata = MetaData(naming_convention=chryso.constants.CONVENTION)
+
+User = Table('users', metadata,
+    Column('uuid',          UUID(), primary_key=True),
+    Column('username',      String(255), nullable=False),
+    Column('name',          String(255), nullable=False),
+    Column('company',       String(255), nullable=True),
+    Column('password',      String(128), nullable=False),
+    Column('created_at',    DateTime,    nullable=False, server_default=func.now()),
+    Column('updated_at',    DateTime,    nullable=False, server_default=func.now(), onupdate=func.now()),
+    Column('deleted_at',    DateTime,    nullable=True),
+)
 
 CreditCard = Table('credit_card', metadata,
     Column('uuid',              UUID(as_uuid=True),         primary_key=True),

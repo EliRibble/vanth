@@ -6,6 +6,7 @@ import flask_uuid
 import sepiida.endpoints
 
 import vanth.api.about
+import vanth.api.user
 import vanth.user
 
 
@@ -50,5 +51,6 @@ def create_app(config):
     app.route('/logout/', methods=['POST'])(logout)
 
     sepiida.endpoints.add_resource(app, vanth.api.about.About, endpoint='about')
+    sepiida.endpoints.add_resource(app, vanth.api.user.User, endpoint='user')
 
     return app
