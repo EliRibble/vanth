@@ -61,4 +61,7 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+# My local virtualenv
 ve
+# The npm installed packages
+node_modules
