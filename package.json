@@ -1,0 +1,31 @@
+{
+  "name": "vanth",
+  "version": "1.0.0",
+  "description": "For tracking expenses",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EliRibble/vanth.git"
+  },
+  "keywords": [
+    "expenses",
+    "budget"
+  ],
+  "author": "Eli Ribble",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/EliRibble/vanth/issues"
+  },
+  "homepage": "https://github.com/EliRibble/vanth#readme",
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}
