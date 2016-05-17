@@ -16,6 +16,11 @@ class User(sepiida.endpoints.APIEndpoint):
     @staticmethod
     def post(payload):
         uri = vanth.platform.user.create(payload['name'], payload['username'], payload['password'])
+        vanth.auth.set_session({
+            'name'      : payload['name'],
+            'uri'       : uri,
+            'username'  : payload['username'],
+        })
 
         return None, 204, {'Location': uri}
 
