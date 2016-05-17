@@ -18,6 +18,9 @@ def create_application(config):
 
     LOGGER.info("Starting up vanth version %s", vanth.version.VERSION)
     application = vanth.server.create_app(config)
+
+    logging.getLogger('vanth.cors').setLevel(logging.WARNING)
+
     return application
 
 def main():
