@@ -1,13 +1,13 @@
-"""create initial tables
+"""inital tables
 
-Revision ID: 58ea73d3d07b
+Revision ID: 688af5ecd407
 Revises: 
-Create Date: 2016-05-02 08:42:38.061749
+Create Date: 2016-05-17 10:29:20.045939
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '58ea73d3d07b'
+revision = '688af5ecd407'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,12 +55,33 @@ def upgrade():
         sa.Column('updated', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
         sa.PrimaryKeyConstraint('uuid', name=op.f('pk_ofxsource'))
     )
+    op.create_table('users',
+        sa.Column('uuid', postgresql.UUID(), nullable=False),
+        sa.Column('username', sa.String(length=255), nullable=False),
+        sa.Column('name', sa.String(length=255), nullable=False),
+        sa.Column('company', sa.String(length=255), nullable=True),
+        sa.Column('password', sa.String(length=128), nullable=False),
+        sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+        sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+        sa.Column('deleted_at', sa.DateTime(), nullable=True),
+        sa.PrimaryKeyConstraint('uuid', name=op.f('pk_users'))
+    )
     op.create_table('ofxaccount',
+        sa.Column('uuid', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('user_id', sa.String(length=255), nullable=False),
+        sa.Column('password', sa.String(length=255), nullable=False),
+        sa.Column('type', sa.String(length=255), nullable=False),
+        sa.Column('source', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('created', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+        sa.Column('updated', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+        sa.ForeignKeyConstraint(['source'], ['ofxsource.uuid'], name='fk_ofxsource'),
+        sa.PrimaryKeyConstraint('uuid', name=op.f('pk_ofxaccount'))
     )
 
 
 def downgrade():
     op.drop_table('ofxaccount')
+    op.drop_table('users')
     op.drop_table('ofxsource')
     op.drop_table('ofxrecord')
     op.drop_table('credit_card')
