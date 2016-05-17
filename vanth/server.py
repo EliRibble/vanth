@@ -9,6 +9,7 @@ import sepiida.endpoints
 import vanth.api.about
 import vanth.api.session
 import vanth.api.user
+import vanth.auth
 import vanth.user
 
 EXPOSE_HEADERS = [
@@ -56,6 +57,7 @@ def create_app(config):
         supports_credentials=True,
         expose_headers=EXPOSE_HEADERS,
     )
+    vanth.auth.register_auth_handlers(app)
 
     app.route('/', methods=['GET'])(index)
     app.route('/login/', methods=['GET', 'POST', 'DELETE'])(login)
@@ -63,5 +65,6 @@ def create_app(config):
 
     sepiida.endpoints.add_resource(app, vanth.api.about.About, endpoint='about')
     sepiida.endpoints.add_resource(app, vanth.api.user.User, endpoint='user')
+    sepiida.endpoints.add_resource(app, vanth.api.session.Session, endpoint='session')
 
     return app
