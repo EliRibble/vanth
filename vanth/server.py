@@ -3,12 +3,17 @@ import uuid
 import flask
 import flask_login
 import flask_uuid
+import sepiida.cors
 import sepiida.endpoints
 
 import vanth.api.about
+import vanth.api.session
 import vanth.api.user
 import vanth.user
 
+EXPOSE_HEADERS = [
+    'Location',
+]
 
 def index():
     return flask.render_template('index.html')
@@ -44,6 +49,12 @@ def create_app(config):
         DEBUG                     = config.debug,
         SECRET_KEY                = config.secret_key,
         SESSION_COOKIE_DOMAIN     = config.session_cookie_domain,
+    )
+    sepiida.cors.register_cors_handlers(
+        app,
+        domains=['localhost:8080', 'www.vanth.com'],
+        supports_credentials=True,
+        expose_headers=EXPOSE_HEADERS,
     )
 
     app.route('/', methods=['GET'])(index)
