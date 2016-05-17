@@ -10,10 +10,10 @@ import vanth.tables
 
 def _to_dict(result):
     return {
-       'username'   : result[vanth.tables.User.c.username],
        'password'   : result[vanth.tables.User.c.password],
        'name'       : result[vanth.tables.User.c.name],
        'uri'        : sepiida.routing.uri('user', result[vanth.tables.User.c.uuid]),
+       'username'   : result[vanth.tables.User.c.username],
    }
 
 def by_filter(filters):
