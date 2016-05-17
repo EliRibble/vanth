@@ -3,6 +3,7 @@ import json
 import flask
 import sepiida.endpoints
 import sepiida.fields
+import sepiida.routing
 
 import vanth.auth
 import vanth.errors
@@ -14,9 +15,10 @@ class Session(sepiida.endpoints.APIEndpoint):
     ENDPOINT = '/session/'
     SIGNATURE = sepiida.fields.JSONObject(s={
         'name'      : sepiida.fields.String(methods=['GET']),
-        'username'  : sepiida.fields.String(),
         'password'  : sepiida.fields.String(methods=['POST']),
-        'uri'       : sepiida.fields.URI('session', methods=['GET'])
+        'uri'       : sepiida.fields.URI('session', methods=['GET']),
+        'user'      : sepiida.fields.URI('user', methods=['GET']),
+        'username'  : sepiida.fields.String(),
     })
     @staticmethod
     def post(payload):
@@ -28,10 +30,14 @@ class Session(sepiida.endpoints.APIEndpoint):
     @staticmethod
     def get(uuid): # pylint: disable=unused-argument
         user = vanth.auth.current_user()
-        del user['password']
         if not user:
             raise vanth.errors.ResourceDoesNotExist("You are not currently authenticated and therefore do not have a session")
-        return user
+        return {
+            'name'      : user['name'],
+            'uri'       : sepiida.routing.uri('session', flask.session['uuid']),
+            'user'      : user['uri'],
+            'username'  : user['username'],
+        }
 
     def list(self):
         payload = self.get(None)

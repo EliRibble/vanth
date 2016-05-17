@@ -45,6 +45,7 @@ def require_user():
         )
 
     flask.g.current_user = user[0]
+    flask.g.session = sepiida.routing.uri('session', flask.session['uuid'])
 
 def current_user():
     return getattr(flask.g, 'current_user', None)
