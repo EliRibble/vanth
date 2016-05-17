@@ -13,8 +13,10 @@ import vanth.user
 class Session(sepiida.endpoints.APIEndpoint):
     ENDPOINT = '/session/'
     SIGNATURE = sepiida.fields.JSONObject(s={
+        'name'      : sepiida.fields.String(methods=['GET']),
         'username'  : sepiida.fields.String(),
         'password'  : sepiida.fields.String(methods=['POST']),
+        'uri'       : sepiida.fields.URI('session', methods=['GET'])
     })
     @staticmethod
     def post(payload):
