@@ -6,6 +6,7 @@ import sepiida.routing
 import vanth.platform.user
 
 PUBLIC_ENDPOINTS = [
+    'session.get',
     'session.post',
     'about.get',
 ]
@@ -25,9 +26,6 @@ def require_user():
     if not endpoint():
         return flask.make_response('Resource not found', 404)
 
-    if endpoint() in PUBLIC_ENDPOINTS:
-        return
-
     if 'user_uri' not in flask.session:
         raise vanth.errors.AuthenticationException(
             status_code = 403,
@@ -37,7 +35,7 @@ def require_user():
 
     _, params = sepiida.routing.extract_parameters(flask.current_app, 'GET', flask.session['user_uri'])
     user = vanth.platform.user.by_filter({'uuid': [str(params['uuid'])]})
-    if not user:
+    if not user and endpoint() not in PUBLIC_ENDPOINTS:
         raise vanth.errors.AuthenticationException(
             status_code = 403,
             error_code  = 'invalid-user',
