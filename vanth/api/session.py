@@ -27,6 +27,7 @@ class Session(sepiida.endpoints.APIEndpoint):
         user = vanth.platform.user.by_credentials(payload['username'], payload['password'])
         if not user:
             raise vanth.errors.InvalidCredentials()
+        LOGGER.debug("Logged in %s %s", user['username'], user['uri'])
         vanth.auth.set_session(user)
 
     @staticmethod
