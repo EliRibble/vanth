@@ -1,4 +1,5 @@
 import json
+import logging
 
 import flask
 import sepiida.endpoints
@@ -10,6 +11,7 @@ import vanth.errors
 import vanth.platform.user
 import vanth.user
 
+LOGGER = logging.getLogger(__name__)
 
 class Session(sepiida.endpoints.APIEndpoint):
     ENDPOINT = '/session/'
@@ -42,3 +44,11 @@ class Session(sepiida.endpoints.APIEndpoint):
     def list(self):
         payload = self.get(None)
         return flask.make_response(json.dumps(payload), 200, {'Content-Type': 'application/json'})
+
+    @staticmethod
+    def delete(uuid):
+        user = vanth.auth.current_user()
+        if not user:
+            raise vanth.errors.AuthenticationException("You cannot delete a session when you do not have a session")
+        LOGGER.debug("Deleteing session %s for %s", uuid, user['uri'])
+        flask.session.clear()
