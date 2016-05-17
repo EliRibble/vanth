@@ -1,5 +1,6 @@
 <html>
 <body>
+	<div id="container"/>
 {% if current_user and current_user.is_authenticated %}
 	<h1>Hello {{ current_user.name }} from Vanth</h1>
 	<form action="/logout/" method="POST">
@@ -13,5 +14,6 @@
 		<input type="submit">Log in</input>
 	</form>
 {% endif %}
+	<script src="build/bundle.js"></script>
 </body>
 </html>
