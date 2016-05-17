@@ -1,3 +1,4 @@
+import json
 import uuid
 
 import flask
@@ -18,29 +19,32 @@ def endpoint():
     if flask.request.endpoint and flask.request.method:
         return "{}.{}".format(flask.request.endpoint.lower(), flask.request.method.lower())
 
+def error(code, title, status_code=403):
+    content = {
+        'errors'    : [{
+            'code'  : code,
+            'title' : title,
+        }]
+    }
+    return flask.make_response(json.dumps(content), status_code)
+
 def require_user():
     user = None
     if flask.request.method == 'OPTIONS' and 'Access-Control-Request-Method' in flask.request.headers:
         return
 
     if not endpoint():
-        return flask.make_response('Resource not found', 404)
+        return error('resource-not-found', 'The resource at URL {} could not be found'.format(flask.request.url), 404)
 
     if 'user_uri' not in flask.session:
-        raise vanth.errors.AuthenticationException(
-            status_code = 403,
-            error_code  = 'unauthorized',
-            title       = 'You must provide a valid session cookie',
-        )
+        if endpoint() in PUBLIC_ENDPOINTS:
+            return
+        return error('unauthorized', 'You must provide a valid session cookie', 403)
 
     _, params = sepiida.routing.extract_parameters(flask.current_app, 'GET', flask.session['user_uri'])
     user = vanth.platform.user.by_filter({'uuid': [str(params['uuid'])]})
     if not user and endpoint() not in PUBLIC_ENDPOINTS:
-        raise vanth.errors.AuthenticationException(
-            status_code = 403,
-            error_code  = 'invalid-user',
-            title       = 'The user tied to your session does not exist. Figure that out',
-        )
+        return error('invalid-user', 'The user tied to your session does not exist. Figure that out', 403)
 
     flask.g.current_user = user[0]
     flask.g.session = sepiida.routing.uri('session', flask.session['uuid'])
