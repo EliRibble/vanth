@@ -67,7 +67,7 @@ gulp.task("build:webpack", ['clean'], function(callback) {
 
 gulp.task("webpack-dev-server", function(callback) {
   var host = process.env.HOST || "localhost";
-  var port = parseInt(process.env.PORT, 10) || 8080;
+  var port = parseInt(process.env.PORT, 10) || 8081;
   var config = Object.create(webpackConfig);
   config.devtool = "eval";
   config.debug = true;
