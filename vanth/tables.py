@@ -1,6 +1,6 @@
 import chryso.constants
 from sqlalchemy import (Column, Date, DateTime, Float, ForeignKey, Integer,
-                        MetaData, String, Table, func)
+                        MetaData, String, Table, UniqueConstraint, func)
 from sqlalchemy.dialects.postgresql import UUID
 
 metadata = MetaData(naming_convention=chryso.constants.CONVENTION)
@@ -14,6 +14,7 @@ User = Table('users', metadata,
     Column('created_at',    DateTime,    nullable=False, server_default=func.now()),
     Column('updated_at',    DateTime,    nullable=False, server_default=func.now(), onupdate=func.now()),
     Column('deleted_at',    DateTime,    nullable=True),
+    UniqueConstraint('username', name='uq_user_username'),
 )
 
 CreditCard = Table('credit_card', metadata,
@@ -30,15 +31,17 @@ CreditCard = Table('credit_card', metadata,
     Column('created',           DateTime(),     nullable=False, server_default=func.now()),
     Column('updated',           DateTime(),     nullable=False, server_default=func.now(), onupdate=func.now()),
     Column('deleted',           DateTime(),     nullable=True),
+    UniqueConstraint('card_id', name='uq_credit_card_id'),
 )
 
 OFXSource = Table('ofxsource',  metadata,
     Column('uuid',              UUID(as_uuid=True),         primary_key=True),
     Column('name',              String(255),     nullable=False), # The name of the institution such as 'America First Credit Union'
     Column('fid',               String(255),     nullable=False), # The FID of the institution, such as 54324
-    Column('bankid',            String(255),     nullable=False), # The bank ID of the institution such as 324377516
+    Column('bankid',            String(255),     nullable=False), # The bank ID of the institution such as 324377516. This may be a routing number
     Column('created',           DateTime(),      nullable=False, server_default=func.now()),
     Column('updated',           DateTime(),     nullable=False, server_default=func.now(), onupdate=func.now()),
+    UniqueConstraint('fid', name='uq_ofxsource_fid'),
 )
 
 OFXAccount = Table('ofxaccount', metadata,
