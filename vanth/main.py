@@ -11,11 +11,13 @@ import vanth.tables
 
 LOGGER = logging.getLogger(__name__)
 
-def create_application(config):
-    sepiida.log.setup_logging()
+def create_db_connection(config):
     engine = chryso.connection.Engine(config.db, vanth.tables)
     chryso.connection.store(engine)
+    return engine
 
+def create_application(config):
+    create_db_connection(config)
     LOGGER.info("Starting up vanth version %s", vanth.version.VERSION)
     application = vanth.server.create_app(config)
 
@@ -23,11 +25,19 @@ def create_application(config):
 
     return application
 
-def main():
+def setup_logging():
     logging.getLogger().setLevel(logging.DEBUG)
     logging.basicConfig()
 
-    config = sepiida.config.load('/etc/vanth.yaml', vanth.config.SPECIFICATION)
+    sepiida.log.setup_logging()
+
+def get_config():
+    return sepiida.config.load('/etc/vanth.yaml', vanth.config.SPECIFICATION)
+
+def main():
+    setup_logging()
+    config = get_config()
+
     application = create_application(config)
     try:
         host = os.getenv('HOST', 'localhost')
