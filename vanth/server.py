@@ -7,6 +7,7 @@ import sepiida.cors
 import sepiida.endpoints
 
 import vanth.api.about
+import vanth.api.ofxsource
 import vanth.api.session
 import vanth.api.user
 import vanth.auth
@@ -63,8 +64,9 @@ def create_app(config):
     app.route('/login/', methods=['GET', 'POST', 'DELETE'])(login)
     app.route('/logout/', methods=['POST'])(logout)
 
-    sepiida.endpoints.add_resource(app, vanth.api.about.About, endpoint='about')
-    sepiida.endpoints.add_resource(app, vanth.api.user.User, endpoint='user')
-    sepiida.endpoints.add_resource(app, vanth.api.session.Session, endpoint='session')
+    sepiida.endpoints.add_resource(app, vanth.api.about.About,          endpoint='about')
+    sepiida.endpoints.add_resource(app, vanth.api.ofxsource.OFXSource,  endpoint='ofxsource')
+    sepiida.endpoints.add_resource(app, vanth.api.session.Session,      endpoint='session')
+    sepiida.endpoints.add_resource(app, vanth.api.user.User,            endpoint='user')
 
     return app
