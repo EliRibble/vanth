@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 import flask
@@ -13,6 +14,8 @@ import vanth.api.user
 import vanth.auth
 import vanth.user
 
+LOGGER = logging.getLogger(__name__)
+
 EXPOSE_HEADERS = [
     'Location',
 ]
@@ -21,11 +24,12 @@ def index():
     return flask.render_template('index.html')
 
 def load_user(user_id):
+    LOGGER.debug("Loading user %s", user_id)
     return vanth.user.load(user_id)
 
 def login():
     if flask.request.method == 'GET':
-        return flask.render_template('index.html')
+        return flask.render_template('login.html')
     elif flask.request.method == 'POST':
         user = vanth.user.load(uuid.uuid4())
         flask_login.login_user(user)
@@ -34,8 +38,16 @@ def login():
     return flask.redirect('/')
 
 def logout():
+    LOGGER.info("Logging out user %s", flask.session['user_id'])
     flask_login.logout_user()
-    return flask.redirect('/')
+    return flask.redirect('/login/')
+
+def require_login():
+    LOGGER.debug("Current user %s for %s", flask.session, flask.request.path)
+    if flask.request.path == '/login/':
+        return
+    if not flask.session.get('user_id'):
+        return flask.redirect('/login/')
 
 def create_app(config):
     app = flask.Flask('vanth', template_folder='../templates')
@@ -58,11 +70,13 @@ def create_app(config):
         supports_credentials=True,
         expose_headers=EXPOSE_HEADERS,
     )
-    vanth.auth.register_auth_handlers(app)
+    #vanth.auth.register_auth_handlers(app)
 
-    app.route('/', methods=['GET'])(index)
-    app.route('/login/', methods=['GET', 'POST', 'DELETE'])(login)
-    app.route('/logout/', methods=['POST'])(logout)
+    app.route('/',          methods=['GET'])(index)
+    app.route('/login/',    methods=['GET', 'POST', 'DELETE'])(login)
+    app.route('/logout/',   methods=['POST'])(logout)
+
+    app.before_request(require_login)
 
     sepiida.endpoints.add_resource(app, vanth.api.about.About,          endpoint='about')
     sepiida.endpoints.add_resource(app, vanth.api.ofxsource.OFXSource,  endpoint='ofxsource')
