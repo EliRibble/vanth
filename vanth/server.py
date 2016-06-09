@@ -5,6 +5,7 @@ import flask_login
 import flask_uuid
 
 import vanth.auth
+import vanth.pages.accounts
 import vanth.pages.index
 
 LOGGER = logging.getLogger(__name__)
@@ -29,6 +30,7 @@ def create_app(config):
         SESSION_COOKIE_DOMAIN     = config.session_cookie_domain,
     )
 
+    app.register_blueprint(vanth.pages.accounts.blueprint)
     app.register_blueprint(vanth.pages.index.blueprint)
     app.register_blueprint(vanth.auth.blueprint)
 
