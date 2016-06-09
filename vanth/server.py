@@ -1,5 +1,4 @@
 import logging
-import uuid
 
 import flask
 import flask_login
@@ -12,7 +11,7 @@ import vanth.api.ofxsource
 import vanth.api.session
 import vanth.api.user
 import vanth.auth
-import vanth.user
+import vanth.platform.user
 
 LOGGER = logging.getLogger(__name__)
 
@@ -25,13 +24,18 @@ def index():
 
 def load_user(user_id):
     LOGGER.debug("Loading user %s", user_id)
-    return vanth.user.load(user_id)
+    return vanth.platform.user.load(user_id)
 
 def login():
     if flask.request.method == 'GET':
         return flask.render_template('login.html')
     elif flask.request.method == 'POST':
-        user = vanth.user.load(uuid.uuid4())
+        username = flask.request.form.get('username')
+        password = flask.request.form.get('password')
+        LOGGER.debug("Checking credentials for %s %s", username, password)
+        user = vanth.platform.user.by_credentials(username, password)
+        if not user:
+            return flask.make_response('error', 403)
         flask_login.login_user(user)
     elif flask.request.method == 'DELETE':
         flask_login.logout_user()
