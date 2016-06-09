@@ -1,9 +1,13 @@
 {% extends 'layout.html' %}
 {% block body %}
-<h1>Please log in</h1>
+<h1>Welcome to Vanth</h1>
+<h2>Please log in</h2>
 <form action="/login/" method="POST">
-	<label>username</label><input type="text" name="username"></input>
-	<label>password</label><input type="password" name="password"></input>
-	<input type="submit">Log in</input>
+	<div class="form-group">
+		<label for="username">username</label>
+		<input id="username" type="text" name="username" class="form-control"></input>
+		<label for="password">password</label>
+		<input id="password" type="password" name="password" class="form-control"></input>
+		<input class="btn btn-primary" type="submit" value="Log in" class="form-control"></input>
 </form>
 {% endblock %}
