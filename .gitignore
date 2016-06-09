@@ -67,3 +67,5 @@ node_modules
 
 # The css that we generate
 static/css
+# The cache for our sass process
+.sass-cache
