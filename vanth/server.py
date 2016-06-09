@@ -20,7 +20,7 @@ EXPOSE_HEADERS = [
 ]
 
 def index():
-    return flask.render_template('index.html')
+    return flask.render_template('index.html', path='/')
 
 def load_user(user_id):
     LOGGER.debug("Loading user %s", user_id)
