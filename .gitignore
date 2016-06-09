@@ -64,3 +64,6 @@ target/
 ve
 # The npm installed packages
 node_modules
+
+# The css that we generate
+static/css
