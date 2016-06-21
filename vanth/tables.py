@@ -46,6 +46,7 @@ OFXSource = Table('ofxsource',  metadata,
 
 OFXAccount = Table('ofxaccount', metadata,
     Column('uuid',              UUID(as_uuid=True),  primary_key=True),
+    Column('name',              String(255),         nullable=False), # My checking account
     Column('user_id',           String(255),         nullable=False), # The user ID for the bank
     Column('password',          String(255),         nullable=False), # The encrypted password for the account
     Column('type',              String(255),         nullable=False), # The account type, like 'checking'
