@@ -1,7 +1,42 @@
 {% extends 'layout.html' %}
 {% block main_content %}
 <h1>Accounts</h1>
-{% if not accounts %}
-<p>You don't have any accounts yet. Let's create some</p>
+{% if accounts %}
+  <table class="table">
+  <tr><th>Name</th><th>Type</th><th>Institution</th></tr>
+  {% for account in accounts %}
+  <tr>
+    <td>{{ account.name }}</td>
+    <td>{{ account.type }}</td>
+    <td>{{ account.institution }}</td>
+  </tr>
+  {% endfor %}
+  </table>
+{% else %}
+  <p>You don't have any accounts yet. Let's create some</p>
 {% endif %}
+<h1>Add new account</h1>
+<form method="POST" action="/account/">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input id="name" type="text" name="name" class="form-control" placeholder="My OFX account"></input>
+    <label for="institution">Institution</label>
+    <input id="institution" type="text" name="institution" class="form-control" list="institutions"></input>
+    <label for="userid">User ID</label>
+    <input id="userid" type="text" name="userid" class="form-control" placeholder="123456"></input>
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" class="form-control" placeholder="1234"></input>
+    <label for="type">Account Type</label>
+    <select id="account_type" value="checking" name="account_type" class="form-control">
+      <option value="checking">Checking</option>
+      <option value="checking">Savings</option>
+    </select>
+    <input class="btn btn-primary form-control" type="submit" value="Create Account"></input>
+    <datalist id="institutions">
+      {% for source in sources %}
+      <option value="{{ source.name }}">{{ source.name }}</option>
+      {% endfor %}
+    </datalist>
+  </div>
+</form>
 {% endblock %}
