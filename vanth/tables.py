@@ -50,6 +50,7 @@ OFXAccount = Table('ofxaccount', metadata,
     Column('password',          String(255),         nullable=False), # The encrypted password for the account
     Column('type',              String(255),         nullable=False), # The account type, like 'checking'
     Column('source',            None,                ForeignKey(OFXSource.c.uuid, name='fk_ofxsource'), nullable=False),
+    Column('owner',             None,                ForeignKey(User.c.uuid, name='fk_user'), nullable=False),
     Column('created',           DateTime(),          nullable=False, server_default=func.now()),
     Column('updated',           DateTime(),     nullable=False, server_default=func.now(), onupdate=func.now()),
 )
