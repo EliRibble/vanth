@@ -18,9 +18,11 @@ def get(user_id):
         vanth.tables.OFXAccount.c.uuid,
     ]).where(
         vanth.tables.OFXAccount.c.source == vanth.tables.OFXSource.c.uuid
-    ).where(
-        vanth.tables.OFXAccount.c.owner == user_id
     )
+    if user_id:
+        query = query.where(
+            vanth.tables.OFXAccount.c.owner == user_id
+        )
     results = engine.execute(query)
     return [{
         'institution'   : result[vanth.tables.OFXSource.c.name.label('institution')],
