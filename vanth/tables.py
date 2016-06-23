@@ -65,6 +65,7 @@ OFXRecord = Table('ofxrecord',  metadata,
     Column('posted',            Date(),         nullable=True), # The date the record posted
     Column('memo',              String(2048),   nullable=True), # The memo of the transaction, like 'POINT OF SALE PURCHASE #0005727'
     Column('type',              String(255),    nullable=True), # The type of the record, like 'POS'
+    Column('ofxaccount',        None,           ForeignKey(OFXAccount.c.uuid, name='fk_ofxaccount'), nullable=False),
     Column('created',           DateTime(),     nullable=False, server_default=func.now()),
     Column('updated',           DateTime(),     nullable=False, server_default=func.now(), onupdate=func.now()),
 )
