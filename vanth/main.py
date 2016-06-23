@@ -30,6 +30,7 @@ def setup_logging():
     logging.basicConfig()
 
     sepiida.log.setup_logging()
+    logging.getLogger('vanth.sgml').setLevel(logging.INFO)
 
 def get_config():
     return sepiida.config.load('/etc/vanth.yaml', vanth.config.SPECIFICATION)
