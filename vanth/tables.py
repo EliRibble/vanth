@@ -45,15 +45,17 @@ OFXSource = Table('ofxsource',  metadata,
 )
 
 OFXAccount = Table('ofxaccount', metadata,
-    Column('uuid',              UUID(as_uuid=True),  primary_key=True),
+    Column('account_id',        String(255),         nullable=False), # 123456-0.9:CHK
     Column('name',              String(255),         nullable=False), # My checking account
-    Column('user_id',           String(255),         nullable=False), # The user ID for the bank
-    Column('password',          String(255),         nullable=False), # The encrypted password for the account
-    Column('type',              String(255),         nullable=False), # The account type, like 'checking'
-    Column('source',            None,                ForeignKey(OFXSource.c.uuid, name='fk_ofxsource'), nullable=False),
     Column('owner',             None,                ForeignKey(User.c.uuid, name='fk_user'), nullable=False),
+    Column('password',          String(255),         nullable=False), # The encrypted password for the account
+    Column('source',            None,                ForeignKey(OFXSource.c.uuid, name='fk_ofxsource'), nullable=False),
+    Column('type',              String(255),         nullable=False), # The account type, like 'checking'
+    Column('user_id',           String(255),         nullable=False), # The user ID for the bank
+    Column('uuid',              UUID(as_uuid=True),  primary_key=True),
+
     Column('created',           DateTime(),          nullable=False, server_default=func.now()),
-    Column('updated',           DateTime(),     nullable=False, server_default=func.now(), onupdate=func.now()),
+    Column('updated',           DateTime(),          nullable=False, server_default=func.now(), onupdate=func.now()),
 )
 
 OFXRecord = Table('ofxrecord',  metadata,
