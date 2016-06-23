@@ -126,6 +126,7 @@ def body(institution, account, start):
     return "<OFX>\r\n" + signonmsg(institution, account) + "\r\n" + bankmsg(institution, account, start) + "\r\n</OFX>"
 
 def query_transactions(institution, account, start=None):
+    start = start or datetime.datetime.now() - datetime.timedelta(days=14)
     return header() + (2*"\r\n") + body(institution, account, start) + "\r\n"
 
 
