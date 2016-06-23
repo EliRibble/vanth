@@ -31,22 +31,14 @@ def get(user_id):
         'uuid'          : result[vanth.tables.OFXAccount.c.uuid],
     } for result in results]
 
-def create(user_id, name, account_type, institution, password, account_user):
+def create(values):
     engine = chryso.connection.get()
 
-    source_name = sqlalchemy.select([
+    values['source'] = sqlalchemy.select([
         vanth.tables.OFXSource.c.uuid
-    ]).where(vanth.tables.OFXSource.c.name == institution)
+    ]).where(vanth.tables.OFXSource.c.name == values.pop('institution'))
 
-    _uuid = uuid.uuid4()
-    statement = vanth.tables.OFXAccount.insert().values( # pylint: disable=no-value-for-parameter
-        uuid        = _uuid,
-        name        = name,
-        user_id     = account_user,
-        password    = password,
-        type        = account_type,
-        source      = source_name,
-        owner       = user_id,
-    )
+    values['uuid'] = uuid.uuid4()
+    statement = vanth.tables.OFXAccount.insert().values(**values) # pylint: disable=no-value-for-parameter
     engine.execute(statement)
-    return _uuid
+    return values['uuid']

@@ -13,12 +13,21 @@ def get_accounts():
 
 @blueprint.route('/account/', methods=['POST'])
 def post_account():
+    account_id   = flask.request.form.get('account_id')
     account_type = flask.request.form.get('account_type')
     institution  = flask.request.form.get('institution')
     name         = flask.request.form.get('name')
     password     = flask.request.form.get('password')
-    userid       = flask.request.form.get('userid')
+    user_id      = flask.request.form.get('user_id')
 
 
-    vanth.platform.ofxaccount.create(flask.session['user_id'], name, account_type, institution, password, userid)
+    vanth.platform.ofxaccount.create({
+        'owner'         : flask.session['user_id'],
+        'account_id'    : account_id,
+        'institution'   : institution,
+        'name'          : name,
+        'password'      : password,
+        'type'          : account_type,
+        'user_id'       : user_id,
+    })
     return flask.redirect('/accounts/')
