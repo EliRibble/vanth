@@ -9,7 +9,7 @@
     <td>{{ account.name }}</td>
     <td>{{ account.type }}</td>
     <td>{{ account.source.name }}</td>
-    <td>Never</td>
+    <td>{{ account.last_updated }}</td>
     <td>
       <form method="POST" action="/update/">
         <input type="hidden" name="account_uuid" value="{{ account.uuid }}"></input>

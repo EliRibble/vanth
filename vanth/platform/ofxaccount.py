@@ -18,8 +18,11 @@ def _select():
         vanth.tables.OFXAccount.c.uuid,
         vanth.tables.OFXSource.c.name.label('source.name'),
         vanth.tables.OFXSource.c.uuid.label('source.uuid'),
+        vanth.tables.OFXUpdate.c.created,
     ]).where(
         vanth.tables.OFXAccount.c.source == vanth.tables.OFXSource.c.uuid
+    ).where(
+        vanth.tables.OFXAccount.c.uuid == vanth.tables.OFXUpdate.c.ofxaccount
     )
 
 def _execute_and_convert(query):
@@ -28,6 +31,7 @@ def _execute_and_convert(query):
     return [{
         'account_id'    : result[vanth.tables.OFXAccount.c.account_id],
         'name'          : result[vanth.tables.OFXAccount.c.name],
+        'last_updated'  : result[vanth.tables.OFXUpdate.c.created],
         'password'      : result[vanth.tables.OFXAccount.c.password],
         'source'        : {
             'name'      : result[vanth.tables.OFXSource.c.name.label('source.name')],
