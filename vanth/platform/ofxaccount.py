@@ -44,7 +44,8 @@ def _execute_and_convert(query):
 
 def by_uuid(account_uuid):
     query = _select().where(vanth.tables.OFXAccount.c.uuid == account_uuid)
-    return _execute_and_convert(query)
+    account = _execute_and_convert(query)
+    return account[0] if account else None
 
 def by_user(user_id):
     query = _select()
