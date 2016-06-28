@@ -66,12 +66,12 @@ OFXUpdate = table('ofxupdate',
 )
 
 OFXRecord = table('ofxrecord',
-    Column('fid',               String(255),    nullable=False), # The Financial institution's ID
     Column('amount',            Float(),        nullable=False), # The amount of the record, like -177.91
     Column('available',         Date(),         nullable=True), # The date the record was available
+    Column('fid',               String(255),    nullable=False), # The Financial institution's ID
     Column('name',              String(1024),   nullable=False), # The name of the record, like 'UT SLC SAMSCLUB #4719'
-    Column('posted',            Date(),         nullable=True), # The date the record posted
     Column('memo',              String(2048),   nullable=True), # The memo of the transaction, like 'POINT OF SALE PURCHASE #0005727'
-    Column('type',              String(255),    nullable=True), # The type of the record, like 'POS'
     Column('ofxaccount',        None,           ForeignKey(OFXAccount.c.uuid, name='fk_ofxaccount'), nullable=False),
+    Column('posted',            Date(),         nullable=True), # The date the record posted
+    Column('type',              String(255),    nullable=True), # The type of the record, like 'POS'
 )
