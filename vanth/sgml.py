@@ -58,7 +58,6 @@ def parse(content):
     root = current_node or parent_node
     while root.parent:
         root = root.parent
-    print(pformat(root))
     return root
 
 def pformat(node, indent=0):
