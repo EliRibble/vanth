@@ -3,12 +3,19 @@
 <h1>Accounts</h1>
 {% if accounts %}
   <table class="table">
-  <tr><th>Name</th><th>Type</th><th>Institution</th></tr>
+  <tr><th>Name</th><th>Type</th><th>Institution</th><th>Last Update</th><th></th></tr>
   {% for account in accounts %}
   <tr>
     <td>{{ account.name }}</td>
     <td>{{ account.type }}</td>
-    <td>{{ account.institution }}</td>
+    <td>{{ account.source.name }}</td>
+    <td>Never</td>
+    <td>
+      <form method="POST" action="/update/">
+        <input type="hidden" name="account_uuid" value="{{ account.uuid }}"></input>
+        <input type="submit" value="Update" class="btn btn-primary"></input>
+      </form>
+    </td>
   </tr>
   {% endfor %}
   </table>
