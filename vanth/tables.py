@@ -59,7 +59,10 @@ OFXAccount = table('ofxaccount',
     Column('type',              String(255),         nullable=False), # The account type, like 'checking'
     Column('user_id',           String(255),         nullable=False), # The user ID for the bank
     Column('uuid',              UUID(as_uuid=True),  primary_key=True),
+)
 
+OFXUpdate = table('ofxupdate',
+    Column('ofxaccount',        None,               ForeignKey(OFXAccount.c.uuid, name='fk_ofxaccount'), nullable=False),
 )
 
 OFXRecord = table('ofxrecord',
