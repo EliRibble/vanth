@@ -13,6 +13,12 @@ def get_accounts():
     sources = vanth.platform.ofxsource.get()
     return flask.render_template('accounts.html', accounts=my_accounts, sources=sources)
 
+@blueprint.route('/accounts/<uuid:account_uuid>/', methods=['GET'])
+def get_account(account_uuid):
+    account = vanth.platform.ofxaccount.by_uuid(account_uuid)
+    records = vanth.platform.ofxrecord.by_account(account_uuid)
+    return flask.render_template('account.html', account=account, records=records)
+
 @blueprint.route('/account/', methods=['POST'])
 @vanth.pages.tools.parse({
     'account_id'    : str,

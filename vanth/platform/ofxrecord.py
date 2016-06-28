@@ -32,3 +32,17 @@ def ensure_exists(account, transactions):
     if to_insert:
         engine.execute(vanth.tables.OFXRecord.insert(), to_insert) # pylint: disable=no-value-for-parameter
         LOGGER.debug("Done inserting %d records", len(new_records))
+
+def by_account(account_uuid):
+    engine = chryso.connection.get()
+    query = sqlalchemy.select([
+        vanth.tables.OFXRecord.c.amount,
+        vanth.tables.OFXRecord.c.available,
+        vanth.tables.OFXRecord.c.fid,
+        vanth.tables.OFXRecord.c.name,
+        vanth.tables.OFXRecord.c.memo,
+        vanth.tables.OFXRecord.c.posted,
+        vanth.tables.OFXRecord.c.type,
+    ]).where(vanth.tables.OFXRecord.c.ofxaccount == account_uuid)
+    rows = engine.execute(query).fetchall()
+    return [dict(row) for row in rows]

@@ -6,7 +6,7 @@
   <tr><th>Name</th><th>Type</th><th>Institution</th><th>Last Update</th><th></th></tr>
   {% for account in accounts %}
   <tr>
-    <td>{{ account.name }}</td>
+    <td><a href="/accounts/{{ account.uuid }}/">{{ account.name }}</a></td>
     <td>{{ account.type }}</td>
     <td>{{ account.source.name }}</td>
     <td>{{ account.last_updated }}</td>

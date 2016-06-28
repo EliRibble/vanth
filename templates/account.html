@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+<h1>{{ account.name }}</h1>
+{% if records %}
+  <table class="table">
+  <tr><th>Name</th><th>Type</th><th>Amount</th><th>Posted</th><th></th></tr>
+  {% for record in records %}
+  <tr>
+    <td>{{ record.name }}</a></td>
+    <td>{{ record.type }}</td>
+    <td>{{ record.amount }}</td>
+    <td>{{ account.posted }}</td>
+    <td>
+      <form method="POST" action="/update/">
+        <input type="hidden" name="account_uuid" value="{{ account.uuid }}"></input>
+        <input type="submit" value="Update" class="btn btn-primary"></input>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </table>
+{% else %}
+  <p>This account does not have any transactions yet</p>
+{% endif %}
+{% endblock %}
