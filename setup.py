@@ -118,14 +118,14 @@ def main():
         },
         packages             = [
             "vanth",
-            "vanth.api",
             "vanth.backend",
+            "vanth.pages",
             "vanth.platform",
         ],
         package_data         = {
             "vanth"                 : ["vanth/*"],
             "vanth.backend"         : ["vanth/backend/*"],
-            "vanth.api"             : ["vanth/api/*"],
+            "vanth.pages"           : ["vanth/pages/*"],
             "vanth.platform"        : ["vanth/platform/*"],
         },
         data_files           = get_data_files(),
