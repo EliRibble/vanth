@@ -35,7 +35,7 @@ def logout():
     return flask.redirect('/login/')
 
 def require_login():
-    LOGGER.debug("Current user %s for %s", flask.session, flask.request.path)
+    LOGGER.debug("Current user %s", flask.session.get('user_id'))
     if flask.request.path == '/login/':
         return
     if not flask.session.get('user_id'):
