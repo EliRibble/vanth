@@ -1,6 +1,6 @@
 import chryso.constants
-from sqlalchemy import (Column, Date, DateTime, Float, ForeignKey, Integer,
-                        MetaData, String, Table, UniqueConstraint, func, text)
+from sqlalchemy import (Column, Date, DateTime, ForeignKey, Integer, MetaData,
+                        Numeric, String, Table, UniqueConstraint, func, text)
 from sqlalchemy.dialects.postgresql import UUID
 
 metadata = MetaData(naming_convention=chryso.constants.CONVENTION)
@@ -66,12 +66,12 @@ OFXUpdate = table('ofxupdate',
 )
 
 OFXRecord = table('ofxrecord',
-    Column('amount',            Float(),        nullable=False), # The amount of the record, like -177.91
-    Column('available',         Date(),         nullable=True), # The date the record was available
+    Column('amount',            Numeric(precision=20, scale=2, asdecimal=True), nullable=False), # The amount of the record, like -177.91
+    Column('available',         Date(),         nullable=True),  # The date the record was available
     Column('fid',               String(255),    nullable=False), # The Financial institution's ID
     Column('name',              String(1024),   nullable=False), # The name of the record, like 'UT SLC SAMSCLUB #4719'
-    Column('memo',              String(2048),   nullable=True), # The memo of the transaction, like 'POINT OF SALE PURCHASE #0005727'
+    Column('memo',              String(2048),   nullable=True),  # The memo of the transaction, like 'POINT OF SALE PURCHASE #0005727'
     Column('ofxaccount',        None,           ForeignKey(OFXAccount.c.uuid, name='fk_ofxaccount'), nullable=False),
-    Column('posted',            Date(),         nullable=True), # The date the record posted
-    Column('type',              String(255),    nullable=True), # The type of the record, like 'POS'
+    Column('posted',            Date(),         nullable=True),  # The date the record posted
+    Column('type',              String(255),    nullable=True),  # The type of the record, like 'POS'
 )
