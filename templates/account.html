@@ -1,7 +1,13 @@
 {% extends 'layout.html' %}
 {% block main_content %}
 <h1>{{ account.name }}</h1>
+<table class="table">
+  <tr><td>Current balance</td><td>{{ account.balance }}</td></tr>
+  <tr><td>Last updated</td><td>{{ account.last_updated }}</td></tr>
+  <tr><td>Transactions</td><td></td></tr>
+</table>
 {% if records %}
+  <h2>Transactions</h2>
   <table class="table">
   <tr><th>Name</th><th>Type</th><th>Amount</th><th>Posted</th><th></th></tr>
   {% for record in records %}
