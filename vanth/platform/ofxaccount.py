@@ -11,10 +11,11 @@ import vanth.tables
 LOGGER = logging.getLogger(__name__)
 
 def _select():
+    my_max = sqlalchemy.sql.functions.max(vanth.tables.OFXUpdate.c.created)
     subselect = sqlalchemy.select([
         vanth.tables.OFXUpdate.c.ofxaccount,
-        sqlalchemy.sql.functions.max(vanth.tables.OFXUpdate.c.created),
-    ]).group_by(
+        my_max,
+    ]).limit(1).group_by(
         vanth.tables.OFXUpdate.c.ofxaccount
     ).alias('ofxupdates')
     return sqlalchemy.select([
