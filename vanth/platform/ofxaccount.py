@@ -30,6 +30,8 @@ def _select():
         vanth.tables.OFXSource.c.uuid.label('source.uuid'),
         subselect,
     ]).select_from(
+        vanth.tables.OFXAccount.join(vanth.tables.OFXSource)
+    ).select_from(
         subselect
     ).where(
         vanth.tables.OFXAccount.c.uuid == subselect.c.ofxaccount
