@@ -45,7 +45,7 @@ CreditCard = table('credit_card',
 OFXSource = table('ofxsource',
     Column('name',              String(255),     nullable=False), # The name of the institution such as 'America First Credit Union'
     Column('fid',               String(255),     nullable=False), # The FID of the institution, such as 54324
-    Column('bankid',            String(255),     nullable=False), # The bank ID of the institution such as 324377516.
+    Column('bankid',            String(255),     nullable=True), # The bank ID of the institution such as 324377516.
                                                                   # This may be a routing number
     Column('url',               String(4096),    nullable=False), # The base URL for the ofxsource
     UniqueConstraint('fid', name='uq_ofxsource_fid'),
