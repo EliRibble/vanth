@@ -48,7 +48,6 @@ OFXSource = table('ofxsource',
     Column('bankid',            String(255),     nullable=True), # The bank ID of the institution such as 324377516.
                                                                   # This may be a routing number
     Column('url',               String(4096),    nullable=False), # The base URL for the ofxsource
-    UniqueConstraint('fid', name='uq_ofxsource_fid'),
 )
 
 OFXAccount = table('ofxaccount',
